@@ -1,0 +1,27 @@
+name: Perbaiki URL Supabase
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Ekstrak project
+        run: |
+          mkdir project
+          unzip flutter_ecostay_app.zip -d project
+
+      - name: Periksa URL
+        run: |
+          FILE="project/flutter_ecostay_app/lib/main.dart"
+
+          echo "URL sebelum:"
+          grep "url:" "$FILE"
+
+          echo ""
+          echo "Catatan: file ZIP tidak akan diubah."
