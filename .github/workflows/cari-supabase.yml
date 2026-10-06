@@ -1,0 +1,55 @@
+name: Cari Konfigurasi Supabase
+
+on:
+  workflow_dispatch:
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Ekstrak project
+        run: |
+          mkdir project
+          unzip flutter_ecostay_app.zip -d project
+
+      - name: Cari konfigurasi Supabase
+        run: |
+          echo "======================================"
+          echo "MENCARI SUPABASE"
+          echo "======================================"
+
+          echo ""
+          echo "1. File yang menggunakan Supabase:"
+          grep -Rni --exclude-dir=build --exclude-dir=.git \
+            -E "Supabase\.initialize|supabase_flutter|supabase\.co|anonKey" \
+            project/flutter_ecostay_app \
+            2>/dev/null || true
+
+          echo ""
+          echo "======================================"
+          echo "2. Mencari URL Supabase:"
+          echo "======================================"
+
+          grep -Rni --exclude-dir=build --exclude-dir=.git \
+            "supabase.co" \
+            project/flutter_ecostay_app \
+            2>/dev/null || true
+
+          echo ""
+          echo "======================================"
+          echo "3. Mencari project ID:"
+          echo "======================================"
+
+          grep -Rni --exclude-dir=build --exclude-dir=.git \
+            "xjqwlvkxomykgtugyfyf" \
+            project/flutter_ecostay_app \
+            2>/dev/null || true
+
+          echo ""
+          echo "======================================"
+          echo "SELESAI"
+          echo "======================================"
