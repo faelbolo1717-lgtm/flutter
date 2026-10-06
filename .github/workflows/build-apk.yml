@@ -2,44 +2,44 @@ name: Build APK Flutter
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "flutter_ecostay_app.zip"
-      - ".github/workflows/build-apk.yml"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Ambil repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
-      - name: Siapkan ZIP
+      - name: Extract Flutter project
         run: |
           mkdir project
           unzip flutter_ecostay_app.zip -d project
 
-      - name: Cari project Flutter
+      - name: Find Flutter project
         run: |
           echo "Mencari pubspec.yaml..."
-          find project -name pubspec.yaml
+          find project -name pubspec.yaml -print
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - name: Install dependency dan build APK
+      - name: Build APK
         run: |
           PROJECT_DIR=$(dirname "$(find project -name pubspec.yaml -print -quit)")
-          echo "Project ditemukan di: $PROJECT_DIR"
+          echo "Project Flutter: $PROJECT_DIR"
           cd "$PROJECT_DIR"
+          flutter --version
           flutter pub get
           flutter build apk --release
 
-      - name: Simpan APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: flutter-ecostay-apk
-          path: project/**/build/app/outputs/flutter-apk/app-release.apk
+          path: |
+            project/**/build/app/outputs/flutter-apk/*.apk
+            project/**/android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
