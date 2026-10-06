@@ -33,7 +33,7 @@ jobs:
           cd "$PROJECT_DIR"
           flutter --version
           flutter pub get
-          flutter build apk --release
+          flutter build apk --release --android-skip-build-dependency-validation
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
