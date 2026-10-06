@@ -1,14 +1,14 @@
-name: Cari Konfigurasi Supabase
+name: Lihat Konfigurasi Supabase
 
 on:
   workflow_dispatch:
 
 jobs:
-  search:
+  check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v6
 
       - name: Ekstrak project
@@ -16,40 +16,20 @@ jobs:
           mkdir project
           unzip flutter_ecostay_app.zip -d project
 
-      - name: Cari konfigurasi Supabase
+      - name: Tampilkan konfigurasi aman
         run: |
-          echo "======================================"
-          echo "MENCARI SUPABASE"
-          echo "======================================"
+          FILE="project/flutter_ecostay_app/lib/main.dart"
+
+          echo "===== KONFIGURASI SUPABASE ====="
+
+          sed -n '7,13p' "$FILE" | \
+          sed -E "s/(anonKey:[[:space:]]*')[^']+/\1[DISENSOR]/"
 
           echo ""
-          echo "1. File yang menggunakan Supabase:"
-          grep -Rni --exclude-dir=build --exclude-dir=.git \
-            -E "Supabase\.initialize|supabase_flutter|supabase\.co|anonKey" \
-            project/flutter_ecostay_app \
-            2>/dev/null || true
+          echo "===== CEK ANONKEY ====="
 
-          echo ""
-          echo "======================================"
-          echo "2. Mencari URL Supabase:"
-          echo "======================================"
-
-          grep -Rni --exclude-dir=build --exclude-dir=.git \
-            "supabase.co" \
-            project/flutter_ecostay_app \
-            2>/dev/null || true
-
-          echo ""
-          echo "======================================"
-          echo "3. Mencari project ID:"
-          echo "======================================"
-
-          grep -Rni --exclude-dir=build --exclude-dir=.git \
-            "xjqwlvkxomykgtugyfyf" \
-            project/flutter_ecostay_app \
-            2>/dev/null || true
-
-          echo ""
-          echo "======================================"
-          echo "SELESAI"
-          echo "======================================"
+          if grep -q "anonKey:" "$FILE"; then
+            echo "anonKey ditemukan: YA"
+          else
+            echo "anonKey ditemukan: TIDAK"
+          fi
