@@ -1,0 +1,39 @@
+name: Cek Konfigurasi Supabase
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Ekstrak project
+        run: |
+          mkdir project
+          unzip flutter_ecostay_app.zip -d project
+
+      - name: Cek konfigurasi
+        run: |
+          FILE="project/flutter_ecostay_app/lib/main.dart"
+
+          echo "File konfigurasi: $FILE"
+          echo ""
+
+          echo "URL Supabase:"
+          grep "url:" "$FILE" | sed "s/anonKey.*//"
+
+          echo ""
+          echo "AnonKey ditemukan:"
+          if grep -q "anonKey:" "$FILE"; then
+            echo "YA"
+          else
+            echo "TIDAK"
+          fi
+
+          echo ""
+          echo "Panjang anonKey:"
+          grep "anonKey:" "$FILE" | sed "s/.*anonKey: '//; s/'.*//" | awk '{print length($0)}'
