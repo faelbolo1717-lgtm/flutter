@@ -1,0 +1,50 @@
+name: Fix Internet Permission & Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Extract Flutter project
+        run: |
+          mkdir -p project
+          unzip -o flutter_ecostay_app.zip -d project
+
+      - name: Add Internet permission
+        run: |
+          MANIFEST="project/flutter_ecostay_app/android/app/src/main/AndroidManifest.xml"
+
+          echo "===== BEFORE ====="
+          cat "$MANIFEST"
+
+          if ! grep -q 'android.permission.INTERNET' "$MANIFEST"; then
+            sed -i '/<manifest[^>]*>/a\    <uses-permission android:name="android.permission.INTERNET"/>' "$MANIFEST"
+          fi
+
+          echo "===== AFTER ====="
+          cat "$MANIFEST"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Build APK
+        run: |
+          cd project/flutter_ecostay_app
+          flutter --version
+          flutter pub get
+          flutter build apk --release --android-skip-build-dependency-validation
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-ecostay-apk-fixed
+          path: project/flutter_ecostay_app/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
