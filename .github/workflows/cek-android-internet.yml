@@ -1,0 +1,30 @@
+name: Cek Internet Permission
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cek:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Extract project
+        run: |
+          mkdir -p project
+          unzip -o flutter_ecostay_app.zip -d project
+
+      - name: Cek AndroidManifest
+        run: |
+          echo "===== ANDROID MANIFEST ====="
+          find project -name AndroidManifest.xml -print
+
+          echo ""
+          echo "===== INTERNET PERMISSION ====="
+          grep -Rni "android.permission.INTERNET" project || true
+
+          echo ""
+          echo "===== MAIN ACTIVITY ====="
+          find project -path "*/android/app/src/main/AndroidManifest.xml" -exec cat {} \; || true
