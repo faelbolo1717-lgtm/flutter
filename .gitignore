@@ -1,0 +1,36 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub-cache/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+
+# iOS/macOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+macos/Pods/
+macos/Flutter/ephemeral/
+
+# Windows/Linux generated
+windows/flutter/ephemeral/
+linux/flutter/ephemeral/
+
+# Generated artifacts
+*.apk
+*.aab
+*.ipa
+*.pdb
+*.ilk

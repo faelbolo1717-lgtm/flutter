@@ -1,0 +1,26 @@
+name: flutter_ecostay_app
+description: "Sistem Manajemen Hotel EcoStay"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Menggunakan 1.0.6 karena 1.0.8 butuh SDK 3.1.0
+  cupertino_icons: 1.0.6
+  
+  # Menggunakan 2.0.2 agar cocok dengan SDK 3.0.5
+  supabase_flutter: 2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Versi 2.0.0 aman untuk Dart 3.0.5
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
